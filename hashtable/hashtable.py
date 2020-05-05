@@ -16,6 +16,9 @@ class HashTable:
 
     Implement this.
     """
+    def __init__(self, capacity):
+        self.capacity = capacity
+        self.hash_table = [None] * self.capacity
 
     def fnv1(self, key):
         """
@@ -30,6 +33,10 @@ class HashTable:
 
         Implement this, and/or FNV-1.
         """
+        hash = 5381
+        for x in key:
+            hash = ((hash << 5) + hash) + ord(x)
+        return hash
 
     def hash_index(self, key):
         """
@@ -47,6 +54,9 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        self.hash_table[index] = (key,value)
+
 
     def delete(self, key):
         """
@@ -56,6 +66,8 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        self.hash_table[index] = None
 
     def get(self, key):
         """
@@ -65,6 +77,11 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        value = None
+        if self.hash_table[index] is not None:
+            key, value = self.hash_table[index]
+        return value
 
     def resize(self):
         """
@@ -73,31 +90,45 @@ class HashTable:
 
         Implement this.
         """
+        new_hash_table = [None] * 2 * self.capacity
+        for i in range(len(self.hash_table)):
+            if self.hash_table[i] is not None:
+                key, value = self.hash_table[i]
+                new_index = self.hash_index(key)
+                new_hash_table[new_index] = key, value
+        self.hash_table = new_hash_table
 
 if __name__ == "__main__":
-    ht = HashTable(2)
+        ht = HashTable(8)
 
-    ht.put("line_1", "Tiny hash table")
-    ht.put("line_2", "Filled beyond capacity")
-    ht.put("line_3", "Linked list saves the day!")
+        ht.put("key-0", "val-0")
+        ht.put("key-1", "val-1")
+        ht.put("key-2", "val-2")
+        ht.put("key-3", "val-3")
+        ht.put("key-4", "val-4")
+        ht.put("key-5", "val-5")
+        ht.put("key-6", "val-6")
+        ht.put("key-7", "val-7")
+        ht.put("key-8", "val-8")
+        ht.put("key-9", "val-9")
 
-    print("")
-
-    # Test storing beyond capacity
-    print(ht.get("line_1"))
-    print(ht.get("line_2"))
-    print(ht.get("line_3"))
-
-    # Test resizing
-    old_capacity = len(ht.storage)
-    ht.resize()
-    new_capacity = len(ht.storage)
-
-    print(f"\nResized from {old_capacity} to {new_capacity}.\n")
-
-    # Test if data intact after resizing
-    print(ht.get("line_1"))
-    print(ht.get("line_2"))
-    print(ht.get("line_3"))
-
-    print("")
+        return_value = ht.get("key-0")
+        self.assertTrue(return_value == "val-0")
+        return_value = ht.get("key-1")
+        self.assertTrue(return_value == "val-1")
+        return_value = ht.get("key-2")
+        self.assertTrue(return_value == "val-2")
+        return_value = ht.get("key-3")
+        self.assertTrue(return_value == "val-3")
+        return_value = ht.get("key-4")
+        self.assertTrue(return_value == "val-4")
+        return_value = ht.get("key-5")
+        self.assertTrue(return_value == "val-5")
+        return_value = ht.get("key-6")
+        self.assertTrue(return_value == "val-6")
+        return_value = ht.get("key-7")
+        self.assertTrue(return_value == "val-7")
+        return_value = ht.get("key-8")
+        self.assertTrue(return_value == "val-8")
+        return_value = ht.get("key-9")
+        self.assertTrue(return_value == "val-9")

@@ -76,7 +76,7 @@ class TestHashTable(unittest.TestCase):
 
         ht.resize()
 
-        self.assertTrue(len(ht.storage) == 0x20000)
+        self.assertTrue(len(ht.hash_table) == 0x20000)
 
         return_value = ht.get("key-0")
         self.assertTrue(return_value == "val-0")
