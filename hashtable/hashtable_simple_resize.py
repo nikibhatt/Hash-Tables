@@ -19,7 +19,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.hash_table = [None] * self.capacity
-        self.elements = 0
 
     def fnv1(self, key):
         """
@@ -59,14 +58,6 @@ class HashTable:
         n = HashTableEntry(key, value)
         if self.hash_table[index] is None:
             self.hash_table[index] = n
-            self.elements += 1
-            if self.elements/self.capacity < 0.2:
-                new_size = self.capacity//2
-                if new_size < 8:
-                    new_size = 8
-                self.resize(new_size)
-            elif self.elements/self.capacity > 0.7:
-                self.resize(self.capacity*2)
             return
         head = self.hash_table[index]
         cur = head
@@ -77,14 +68,7 @@ class HashTable:
             cur = cur.next
         n.next = head
         self.hash_table[index] = n
-        self.elements += 1
-        if self.elements/self.capacity < 0.2:
-            new_size = self.capacity//2
-            if new_size < 8:
-                new_size = 8
-            self.resize(new_size)
-        elif self.elements/self.capacity > 0.7:
-            self.resize(self.capacity*2)
+
 
     def delete(self, key):
         """
@@ -102,14 +86,6 @@ class HashTable:
         if head.key == key:
             head = head.next
             self.hash_table[index] = head
-            self.elements -= 1
-            if self.elements/self.capacity < 0.2:
-                new_size = self.capacity//2
-                if new_size < 8:
-                    new_size = 8
-                self.resize(new_size)
-            elif self.elements/self.capacity > 0.7:
-                self.resize(self.capacity*2)
             return
 
         cur = head
@@ -118,11 +94,6 @@ class HashTable:
                 cur = cur.next
                 if cur.key == key:
                     prev.next = cur.next
-                    self.elements -= 1
-                    if self.elements/self.capacity < 0.2:
-                        self.resize(self.capacity//2)
-                    elif self.elements/self.capacity > 0.7:
-                        self.resize(self.capacity*2)
                     return
         return
 
@@ -143,15 +114,14 @@ class HashTable:
             cur = cur.next
         return None
 
-    def resize(self, newsize):
+    def resize(self):
         """
         Doubles the capacity of the hash table and
         rehash all key/value pairs.
 
         Implement this.
         """
-        self.capacity = newsize
-        new_hash_table = [None] * self.capacity
+        new_hash_table = [None] * 2 * self.capacity
         for i in range(len(self.hash_table)):
             if self.hash_table[i] is not None:
                 new_index = self.hash_index(self.hash_table[i].key)
