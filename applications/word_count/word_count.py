@@ -1,5 +1,17 @@
+
+import re
+
 def word_count(s):
-    # Implement me.
+    cache = {}
+    s = s.translate({ord(c): " " for c in "\": ; , . - + = / \ | [ ] { } ( ) * ^ &"})
+    for w in s.split():
+        w = w.lower()
+        if w not in cache:
+            cache[w] = 1
+        else:
+            cache[w] += 1
+    return cache
+
 
 
 if __name__ == "__main__":
